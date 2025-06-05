@@ -1,7 +1,9 @@
 import JobListItem from "./JobListItem";
+import Spinner from "./Spinner";
 
 type JobListProps = {
   jobItems: JobItem[];
+  isLoading: boolean;
 };
 
 type JobItem = {
@@ -13,12 +15,13 @@ type JobItem = {
   relevanceScore: number;
 };
 
-export function JobList({ jobItems }: JobListProps) {
+export function JobList({ jobItems, isLoading }: JobListProps) {
   return (
     <ul className="job-list">
-      {jobItems.map((jobItem: JobItem) => (
-        <JobListItem jobItem={jobItem} />
-      ))}
+      {isLoading && <Spinner />}
+
+      {!isLoading &&
+        jobItems.map((jobItem: JobItem) => <JobListItem jobItem={jobItem} />)}
     </ul>
   );
 }
