@@ -25,3 +25,9 @@ If you are developing a production application, we recommend updating the config
 - Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
 - Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
 - Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+
+# Project Takeaways
+
+## Why shouldn't we be using useEffect to grab the data for SearchForm.tsx?
+
+In the previous projects we've been using useEffect to interact with external servivces, like when we're using fetch. We wanted to do this when the component first mounts, and then when something was updated. In the case of this project we're grabbing data after a user event, so instead we're grabbing data in SearchForm.tsx right in the onChange handler function. Except we aren't, in practice a lot of the time people will still use useEffect, and just have it update when the state that's updated by the user event is updated.
