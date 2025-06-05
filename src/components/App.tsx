@@ -43,7 +43,7 @@ function App() {
           <JobList jobItems={jobItems} isLoading={isLoading} />
           <PaginationControls />
         </Sidebar>
-        <JobItemContent />
+        <JobItemContent jobItem={jobItem} />
       </Container>
 
       <Footer />
