@@ -25,7 +25,8 @@ function App() {
   // derived state
   const totalNumberOfResults = jobItems?.length || 0;
   const jobItemsSliced =
-    jobItems?.slice(currentPage * 7 - 7, currentPage * 7) || []; // Limit to 10 items for pagination
+    jobItems?.slice(currentPage * 7 - 7, currentPage * 7) || [];
+  const totalNumberOfPages = Math.ceil(totalNumberOfResults / 7); // Limit to 10 items for pagination
 
   // state change functions
   const handleChangePage = (direction: "next" | "previous") => {
@@ -59,6 +60,7 @@ function App() {
           <PaginationControls
             currentPage={currentPage}
             onClick={handleChangePage}
+            totalNumberOfPages={totalNumberOfPages}
           />
         </Sidebar>
         <JobItemContent />
