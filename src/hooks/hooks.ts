@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { JobItem, JobItemExpanded } from "../lib/types";
 import { BASE_URL } from "../lib/constants";
 import { useQuery } from "@tanstack/react-query";
+import { handleError } from "../components/utils/utils";
 
 type JobItemApiResponse = {
   public: boolean;
@@ -30,11 +31,12 @@ const fetchJobItems = async (
   searchText: string
 ): Promise<JobItemsApiResposne> => {
   const response = await fetch(`${BASE_URL}?search=${searchText}`);
-  const data = await response.json();
   if (!response.ok) {
     const errorData = await response.json();
     throw new Error(`Error fetching job items: ${errorData.description}`);
   }
+  const data = await response.json();
+
   return data;
 };
 
@@ -48,7 +50,7 @@ export function useJobItem(id: number | null) {
       retry: false,
       enabled: Boolean(id),
       onError: (error) => {
-        console.log(error);
+        handleError(error);
       },
     }
   );
@@ -67,7 +69,7 @@ export function useJobItems(searchText: string) {
       retry: false,
       enabled: Boolean(searchText),
       onError: (error) => {
-        console.log(error);
+        handleError(error);
       },
     }
   );
