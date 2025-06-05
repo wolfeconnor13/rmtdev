@@ -53,3 +53,13 @@ export function useDebounce<T>(value: T, delay = 500): T {}
 
 Arrow / anonymous function:
 export const useDebounce = <T>(value: T, delay = 500): T => {}
+
+## Caching fetch request @tanstack/react-query
+
+In NextJS caching our search and selected item would be easier but here we have to implement it ourselves. We do this ourselves with a popular package from TanStack called react-query.
+
+Notes on react-query:
+useQuery() is the hook to call.
+Takes 3 arguments {dependency array, function to fetch data, configuration}
+Need to wrap the component that uses it in a ReactQueryProvider
+Loading states can become confusing with react-query. In our app we wanted to display a loading spinner when we began fetching an expanded item. In react-query because there was no data initially, this is considered as isLoading was true! Changing the state from isLoading to isInitialLoading solves our problem.
