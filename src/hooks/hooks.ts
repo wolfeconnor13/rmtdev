@@ -8,6 +8,12 @@ type JobItemApiResponse = {
   jobItem: JobItemExpanded;
 };
 
+type JobItemsApiResposne = {
+  public: boolean;
+  sorted: boolean;
+  jobItems: JobItem[];
+};
+
 const fetchJobItem = async (id: number): Promise<JobItemApiResponse> => {
   const response = await fetch(`${BASE_URL}/${id}`);
   if (!response.ok) {
@@ -17,6 +23,18 @@ const fetchJobItem = async (id: number): Promise<JobItemApiResponse> => {
     );
   }
   const data = await response.json();
+  return data;
+};
+
+const fetchJobItems = async (
+  searchText: string
+): Promise<JobItemsApiResposne> => {
+  const response = await fetch(`${BASE_URL}?search=${searchText}`);
+  const data = await response.json();
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(`Error fetching job items: ${errorData.description}`);
+  }
   return data;
 };
 
@@ -40,24 +58,23 @@ export function useJobItem(id: number | null) {
 }
 
 export function useJobItems(searchText: string) {
-  const [jobItems, setJobItems] = useState<JobItem[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const { data, isInitialLoading } = useQuery(
+    ["job-items", searchText],
+    () => fetchJobItems(searchText),
+    {
+      staleTime: 1000 * 60 * 60, // Cache for 60 minutes
+      refetchOnWindowFocus: false,
+      retry: false,
+      enabled: Boolean(searchText),
+      onError: (error) => {
+        console.log(error);
+      },
+    }
+  );
 
-  useEffect(() => {
-    if (!searchText) return;
-    setIsLoading(true);
-    const fetchData = async () => {
-      const response = await fetch(`${BASE_URL}?search=${searchText}`);
-      const data = await response.json();
-      setIsLoading(false);
-      setJobItems(data.jobItems);
-    };
-
-    fetchData();
-  }, [searchText]);
-
-  return { jobItems, isLoading } as const;
+  return { jobItems: data?.jobItems, isLoading: isInitialLoading } as const;
 }
+//-------------------------------------------------------------
 
 export function useDebounce<T>(value: T, delay = 500): T {
   const [debouncedValue, setDebouncedValue] = useState(value);

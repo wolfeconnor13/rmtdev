@@ -20,8 +20,8 @@ function App() {
 
   const { jobItems, isLoading } = useJobItems(debouncedSearchText);
 
-  const totalNumberOfResults = jobItems.length;
-  const jobItemsSliced = jobItems.slice(0, 7); // Limit to 10 items for pagination
+  const totalNumberOfResults = jobItems?.length || 0;
+  const jobItemsSliced = jobItems?.slice(0, 7) || []; // Limit to 10 items for pagination
 
   return (
     <>
