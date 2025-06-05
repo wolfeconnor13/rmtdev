@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Background from "./Background";
 import Container from "./Container";
 import Footer from "./Footer";
@@ -12,19 +12,14 @@ import ResultsCount from "./ResultsCount";
 import SortingControls from "./SortingControls";
 import JobList from "./JobList";
 import PaginationControls from "./PaginationControls";
-import { useJobItems } from "../hooks/hooks";
+import { useDebounce, useJobItems } from "../hooks/hooks";
 
 function App() {
   const [searchText, setSearchText] = useState("");
-  const [debouncedSearchText, setDebouncedSearchText] = useState("");
+  const debouncedSearchText = useDebounce(searchText, 250);
+
   const { jobItemsSliced, isLoading, totalNumberOfResults } =
     useJobItems(debouncedSearchText);
-
-  useEffect(() => {
-    const timerId = setTimeout(() => setDebouncedSearchText(searchText), 1000);
-
-    return () => clearTimeout(timerId);
-  }, [searchText]);
 
   return (
     <>

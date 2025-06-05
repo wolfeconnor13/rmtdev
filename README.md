@@ -41,3 +41,15 @@ useEffect(() => {
 const timerId = setTimeout(() => setDebouncedSearchText(searchText), 1000);
 return () => clearTimeout(timerId); //cleanup
 }, [searchText]);
+
+## Generics
+
+Our debounce hook might be useful to use in other components as well, but when it's first created it's only taking a string. We can use union operations to specify more types, but then we also have to include that union in the return type. Overall, it would be better for us to describe the relationship between the input and the output. That's where we can use a generic.
+
+Note: We need to specify in our hooks file that useDebounce is a so called "generic-function"
+
+Named function:
+export function useDebounce<T>(value: T, delay = 500): T {}
+
+Arrow / anonymous function:
+export const useDebounce = <T>(value: T, delay = 500): T => {}
