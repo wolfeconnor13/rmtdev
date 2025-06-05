@@ -63,3 +63,7 @@ useQuery() is the hook to call.
 Takes 3 arguments {dependency array, function to fetch data, configuration}
 Need to wrap the component that uses it in a ReactQueryProvider
 Loading states can become confusing with react-query. In our app we wanted to display a loading spinner when we began fetching an expanded item. In react-query because there was no data initially, this is considered as isLoading was true! Changing the state from isLoading to isInitialLoading solves our problem.
+
+## e.currentTarget vs e.target
+
+e.currentTarget can be used to get the actual item that your function is being used on, even if the the event bubbled up from a child component.
