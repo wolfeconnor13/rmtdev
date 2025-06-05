@@ -31,3 +31,13 @@ If you are developing a production application, we recommend updating the config
 ## Why shouldn't we be using useEffect to grab the data for SearchForm.tsx?
 
 In the previous projects we've been using useEffect to interact with external servivces, like when we're using fetch. We wanted to do this when the component first mounts, and then when something was updated. In the case of this project we're grabbing data after a user event, so instead we're grabbing data in SearchForm.tsx right in the onChange handler function. Except we aren't, in practice a lot of the time people will still use useEffect, and just have it update when the state that's updated by the user event is updated.
+
+## useDebounce React Hook
+
+Slows down our requests so we aren't making a network request with every typed letter / update in searchText state. In general, debouncing is useful when an event is firing many times a second (think of events like scrolling, mouse moving, etc.) We implemented our own debounce using a function like this:
+
+const [debouncedSearchText, setDebouncedSearchText] = useState("");
+useEffect(() => {
+const timerId = setTimeout(() => setDebouncedSearchText(searchText), 1000);
+return () => clearTimeout(timerId); //cleanup
+}, [searchText]);
