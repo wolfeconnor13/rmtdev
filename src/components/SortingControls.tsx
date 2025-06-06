@@ -1,6 +1,8 @@
+import { SortBy } from "../lib/types";
+
 type SortingControlsProps = {
-  sortBy: "relevant" | "recent";
-  onClick: (sortType: "relevant" | "recent") => void;
+  sortBy: SortBy;
+  onClick: (sortType: SortBy) => void;
 };
 
 export default function SortingControls({
@@ -10,24 +12,39 @@ export default function SortingControls({
   return (
     <section className="sorting">
       <i className="fa-solid fa-arrow-down-short-wide"></i>
-
-      <button
-        onClick={() => onClick("relevant")}
-        className={`sorting__button sorting__button--relevant ${
-          sortBy === "relevant" ? "sorting__button--active" : ""
-        }`}
-      >
-        Relevant
-      </button>
-
-      <button
-        onClick={() => onClick("recent")}
-        className={`sorting__button sorting__button--recent ${
-          sortBy === "recent" ? "sorting__button--active" : ""
-        }`}
-      >
-        Recent
-      </button>
+      <SortingButton
+        sortingType={"relevant"}
+        currentSortBy={sortBy}
+        onClick={onClick}
+      />
+      <SortingButton
+        sortingType={"recent"}
+        currentSortBy={sortBy}
+        onClick={onClick}
+      />
     </section>
+  );
+}
+
+type SortingButtonProps = {
+  sortingType: SortBy;
+  currentSortBy: SortBy;
+  onClick: (sortBy: SortBy) => void;
+};
+
+function SortingButton({
+  sortingType,
+  currentSortBy,
+  onClick,
+}: SortingButtonProps) {
+  return (
+    <button
+      onClick={() => onClick(sortingType)}
+      className={`sorting__button sorting__button--${sortingType} ${
+        currentSortBy === sortingType ? "sorting__button--active" : ""
+      }`}
+    >
+      {sortingType}
+    </button>
   );
 }
