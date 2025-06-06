@@ -9,7 +9,6 @@ export default function BookmarksButton() {
   const popoverRef = useRef<HTMLDivElement>(null);
 
   const handleClickOutside = () => {
-    console.log("Clicked outside");
     setIsOpen(false);
   };
 

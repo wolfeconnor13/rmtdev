@@ -117,3 +117,17 @@ Our popover is in the Header component, but what happens if the header component
 One of the pitfalls for our useActiveId custom hook was that it was creating state in the hook, as well as adding event listeners. Everytime we went to use this custom hook (in multiple components) we then were creating a new state for each of those components, and adding event listeners for all of those components as well.
 
 In reality, we really only needed to set that state and event listener once. We changed this by implementing a context provider for ActiveId.
+
+## Data wrapper components
+
+When we moved our state into the JobItemsContextProvider we then proceeded to go through the app and look at what components were recieving that state. We then went through and updated those components to use the context. When we got to JobItems we realized that it takes in an array of job items. Previously we were using some logic in the App component to slice that job items array and pass it to JobList.
+
+BUT
+
+We were also using the JobList component in our BookmarksPopover component. That component gives a different array of job items to the JobList component. So if we went into JobList component and just gave it the sliced / unsliced version of all the job items then it would break the BookmarksPopover component.
+
+To solve this we wrap the JobList component in the App in another component (which we can call a data wrapper.) The sole job of the wrapping component is to use the context and pass the correct data outside of the app component.
+
+## useMemo
+
+Used when we only want to compute something once, usually on computationally expensive operations like creating and sorting an array.
