@@ -34,7 +34,6 @@ function App() {
       return a.daysAgo - b.daysAgo;
     }
   });
-
   const jobItemsSortedAndSliced = jobItemsSorted.slice(
     currentPage * RESULTS_PER_PAGE - RESULTS_PER_PAGE,
     currentPage * RESULTS_PER_PAGE

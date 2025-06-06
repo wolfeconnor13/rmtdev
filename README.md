@@ -67,3 +67,11 @@ Loading states can become confusing with react-query. In our app we wanted to di
 ## e.currentTarget vs e.target
 
 e.currentTarget can be used to get the actual item that your function is being used on, even if the the event bubbled up from a child component.
+
+## React Context API
+
+We found a good use for the React Context API in this project in our BookmarkIcon component. The bookmark icon could be used many places throughout our application, so drilling down props from the App component all the way to down to wherever our bookmark icon would we unwieldy, and instead we can use the React Context API.
+
+First we need to create a context for the ContextProvider (which is just a react component). We create it with createContext() from react. This way a component can be provided that context to use the functions/state/data in the ContextProvider.
+
+There is one additional step to using the ContextProvider though, we have to wrap the components that want to use that context in the actual .Provider. As such BookmarksContextProvider also need to accept children, so that is can display whatever it is wrapping. We return the provider wrapping the children, with the props to the provider being whatever functions or values we want to use.
