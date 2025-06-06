@@ -1,4 +1,4 @@
-import { createContext, useMemo, useState } from "react";
+import { createContext, useCallback, useMemo, useState } from "react";
 import { useSearchQuery, useSearchTextContext } from "../hooks/hooks";
 import { JobItem, PageDirection, SortBy } from "../lib/types";
 import { RESULTS_PER_PAGE } from "../lib/constants";
@@ -53,32 +53,51 @@ export default function JobItemsContextProvider({
   const totalNumberOfPages = Math.ceil(totalNumberOfResults / 7); // Limit to 10 items for pagination
 
   // event handlers / actions
-  const handleChangePage = (direction: PageDirection) => {
-    if (direction === "next") {
-      setCurrentPage((prev) => prev + 1);
-    } else if (direction === "previous") {
-      setCurrentPage((prev) => Math.max(prev - 1, 1));
-    }
-  };
+  const handleChangePage = useCallback(
+    () => (direction: PageDirection) => {
+      if (direction === "next") {
+        setCurrentPage((prev) => prev + 1);
+      } else if (direction === "previous") {
+        setCurrentPage((prev) => Math.max(prev - 1, 1));
+      }
+    },
+    []
+  );
 
-  const handleChangeSortBy = (newSortBy: "relevant" | "recent") => {
-    setCurrentPage(1); // Reset to first page when changing sort
-    setSortBy(newSortBy);
-  };
+  const handleChangeSortBy = useCallback(
+    () => (newSortBy: "relevant" | "recent") => {
+      setCurrentPage(1); // Reset to first page when changing sort
+      setSortBy(newSortBy);
+    },
+    []
+  );
+
+  const contextValue = useMemo(
+    () => ({
+      jobItems,
+      jobItemsSortedAndSliced,
+      isLoading,
+      totalNumberOfResults,
+      totalNumberOfPages,
+      currentPage,
+      sortBy,
+      handleChangePage,
+      handleChangeSortBy,
+    }),
+    [
+      jobItems,
+      jobItemsSortedAndSliced,
+      isLoading,
+      totalNumberOfResults,
+      totalNumberOfPages,
+      currentPage,
+      sortBy,
+      handleChangePage,
+      handleChangeSortBy,
+    ]
+  );
   return (
-    <JobItemsContext.Provider
-      value={{
-        jobItems,
-        jobItemsSortedAndSliced,
-        isLoading,
-        totalNumberOfResults,
-        totalNumberOfPages,
-        currentPage,
-        sortBy,
-        handleChangePage,
-        handleChangeSortBy,
-      }}
-    >
+    <JobItemsContext.Provider value={contextValue}>
       {children}
     </JobItemsContext.Provider>
   );
