@@ -159,3 +159,23 @@ export function useBookmarksContext() {
   }
   return context;
 }
+
+export function useClickOutside(
+  refs: React.RefObject<HTMLElement>[],
+  handler: () => void
+) {
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      if (
+        e.target instanceof HTMLElement &&
+        refs.every((ref) => !ref.current?.contains(e.target as Node))
+      ) {
+        handler();
+      }
+    };
+    document.addEventListener("click", handleClick);
+    return () => {
+      document.removeEventListener("click", handleClick);
+    };
+  }, [refs, handler]);
+}
