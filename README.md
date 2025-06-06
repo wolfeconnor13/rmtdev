@@ -107,3 +107,13 @@ We can indicate that we aren't going to use the props by taking the props with a
 forwardedRef<HTMLDivElement>(function (\_, ref) {
 
 })
+
+## React Portal
+
+Our popover is in the Header component, but what happens if the header component has some styling applied to it that we don't want the popover to have? We can wrap the popover in a createPortal(). When we do this the first argument should be whatever JSX you want rendered, and the second argument should be the container you want to teleport the JSX to.
+
+## Pitfalls of using custom hooks
+
+One of the pitfalls for our useActiveId custom hook was that it was creating state in the hook, as well as adding event listeners. Everytime we went to use this custom hook (in multiple components) we then were creating a new state for each of those components, and adding event listeners for all of those components as well.
+
+In reality, we really only needed to set that state and event listener once. We changed this by implementing a context provider for ActiveId.
