@@ -75,3 +75,35 @@ We found a good use for the React Context API in this project in our BookmarkIco
 First we need to create a context for the ContextProvider (which is just a react component). We create it with createContext() from react. This way a component can be provided that context to use the functions/state/data in the ContextProvider.
 
 There is one additional step to using the ContextProvider though, we have to wrap the components that want to use that context in the actual .Provider. As such BookmarksContextProvider also need to accept children, so that is can display whatever it is wrapping. We return the provider wrapping the children, with the props to the provider being whatever functions or values we want to use.
+
+## Refs and Forwarded Refs.
+
+In our BookmarksButton component we used state to manage whether the popover was open. We also wanted to close the popover when the user clicked outside of the popover. We can manage this with a document.eventListener(). It's easy to target the button itself, as the state and the button all exist in the BookmarksButton component. We can attach a ref to the button and then use a handleClick function to handle the logic that results from a mouseclick. We basically say hey, if the click's target was the button, we shouldn't be overriding the click on the button to open it.
+
+What about the pop over? If you're thinking about it logically you could conclude that we just need to pass a ref to the popover component, accept it in the popover component, and then set it to the HTMLElement that contains the popover.
+
+This is almost the correct approach. Technically a component takes two arguments props and ref!
+
+export default function SomeComponent({someprop1, someprop2}, ref).
+
+We also have to restructure the component to use the ref. We have to wrap the function in a forwardRef.
+
+const SomeComponent = forwardRef(function (props, ref) {
+... // component logic
+});
+
+export default SomeComponent;
+
+### Tricky typing with forwardRef
+
+When you pass the ref to the component, it doesn't infer what type the ref is, we need to specify what type that is. We can do that by using the angled brackets on forwardRef<>.
+
+The thing is, the ref type comes FIRST! The type for the props is after.
+
+### What if we want to use forwardRef and no props?
+
+We can indicate that we aren't going to use the props by taking the props with a \_ character.
+
+forwardedRef<HTMLDivElement>(function (\_, ref) {
+
+})
